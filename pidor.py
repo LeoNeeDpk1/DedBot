@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # coding: utf8
 import os
-from random import randint
 import time
+from random import randint
 from ConfigParser import ConfigParser
+
+curdir = os.path.dirname(os.path.abspath(__file__))
 
 def ParamsRead(section, key): #Парсер config.ini
     parameter = ConfigParser()
@@ -56,12 +58,12 @@ pidor = plines[randint(0, len(plines)-1)]
 pidor = str(pidor).replace("\n", "")
 stats(str(pidor))
 
-os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=-1001088067576 -d text="' + str(quote) + '"')
+os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d text="' + str(quote) + '"')
 time.sleep(randint(1, 3))
-os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=-1001088067576 -d text="' + str(quote2) + '"')
+os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d text="' + str(quote2) + '"')
 time.sleep(randint(1, 3))
-os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=-1001088067576 -d parse_mode=html -d text="Пидор обнаружен! И это: <b>' + str(pidor) + '</b>"')
-os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=-1001088067576 -d parse_mode=html -d text="<b> Доска позора:</b>\n' + str(topchart()) + '"')
+os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d parse_mode=html -d text="Пидор обнаружен! И это: <b>' + str(pidor) + '</b>"')
+os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d parse_mode=html -d text="<b> Доска позора:</b>\n' + str(topchart()) + '"')
 
 
 
