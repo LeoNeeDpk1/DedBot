@@ -9,6 +9,7 @@ from configparser import ConfigParser
 curdir = os.path.dirname(os.path.abspath(__file__))
 
 
+
 def resultsread(section, key):  # Парсер results.ini
     result = ConfigParser()
     result.read('/home/fku-server/pidor_roulette/results.ini')
