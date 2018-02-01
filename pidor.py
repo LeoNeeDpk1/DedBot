@@ -63,7 +63,9 @@ startphrase = c.startphrase[randint(0, len(c.startphrase)-1)]
 searchphrase = c.searchphrase[randint(0, len(c.searchphrase)-1)]
 foundphrase = str(c.foundphrase[randint(0, len(c.foundphrase)-1)] % pidor)
 
+
 stats(pidor)
+
 
 sendtotg(startphrase)
 time.sleep(randint(1, 3))
