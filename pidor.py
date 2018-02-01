@@ -6,6 +6,8 @@ import time
 from random import randint
 from configparser import ConfigParser
 
+
+
 curdir = os.path.dirname(os.path.abspath(__file__))
 
 
