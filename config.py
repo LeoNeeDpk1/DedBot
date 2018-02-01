@@ -8,4 +8,4 @@ startphrase = ['phrase1', 'phrase2', '..']
 
 searchphrase = ['phrase1', 'phrase2', '..']
 
-foundphrase = ['phrase1, %s', '%s, phrase2', '..'] # Вместо %s будет подставляться имя того, кого выбрал рандом.
+foundphrase = ['phrase1, <b>%s</b>', '<b>%s</b>, phrase2', '..'] # Вместо %s будет подставляться имя того, кого выбрал рандом. parse_mode=html.
