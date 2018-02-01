@@ -8,4 +8,4 @@ startphrase = ['phrase1', 'phrase2', '..']
 
 searchphrase = ['phrase1', 'phrase2', '..']
 
-foundphrase = ['phrase1', 'phrase2', '..']
+foundphrase = ['phrase1, %s', '%s, phrase2', '..'] # Вместо %s будет подставляться имя того, кого выбрал рандом.
