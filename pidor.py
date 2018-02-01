@@ -1,16 +1,19 @@
 #!/usr/bin/env python
 # coding: utf8
+import config
 import os
 import time
 from random import randint
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 curdir = os.path.dirname(os.path.abspath(__file__))
 
-def ParamsRead(section, key): #Парсер config.ini
-    parameter = ConfigParser()
-    parameter.read('/home/fku-server/pidor_roulette/results.ini')
-    return parameter.get(section, key)
+
+def resultsread(section, key):  # Парсер results.ini
+    result = ConfigParser()
+    result.read('/home/fku-server/pidor_roulette/results.ini')
+    return result.get(section, key)
+
 
 def stats(p): #Запись статистики
     statscheck = ConfigParser()
@@ -25,7 +28,7 @@ def stats(p): #Запись статистики
             with open('/home/fku-server/pidor_roulette/results.ini', 'w') as statfile:
                 statscheck.write(statfile)
         else:
-            statscheck.set(p,'num', (int(ParamsRead(p, 'num'))+ 1))
+            statscheck.set(p,'num', (int(resultsread(p, 'num'))+ 1))
             with open('/home/fku-server/pidor_roulette/results.ini', 'w') as statfile:
                 statscheck.write(statfile)
 
@@ -58,13 +61,13 @@ pidor = plines[randint(0, len(plines)-1)]
 pidor = str(pidor).replace("\n", "")
 stats(str(pidor))
 
-os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d text="' + str(quote) + '"')
+'''os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d text="' + str(quote) + '"')
 time.sleep(randint(1, 3))
 os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d text="' + str(quote2) + '"')
 time.sleep(randint(1, 3))
 os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d parse_mode=html -d text="Пидор обнаружен! И это: <b>' + str(pidor) + '</b>"')
 os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d parse_mode=html -d text="<b> Доска позора:</b>\n' + str(topchart()) + '"')
-
+'''
 
 
 
