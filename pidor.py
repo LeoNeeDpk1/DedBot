@@ -61,12 +61,12 @@ pidor = plines[randint(0, len(plines)-1)]
 pidor = str(pidor).replace("\n", "")
 stats(str(pidor))
 
-'''os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d text="' + str(quote) + '"')
+'''os.system('curl -s -X POST https://api.telegram.org/bot/sendMessage -d chat_id= -d text="' + str(quote) + '"')
 time.sleep(randint(1, 3))
-os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d text="' + str(quote2) + '"')
+os.system('curl -s -X POST https://api.telegram.org/bot/sendMessage -d chat_id= -d text="' + str(quote2) + '"')
 time.sleep(randint(1, 3))
-os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d parse_mode=html -d text="Пидор обнаружен! И это: <b>' + str(pidor) + '</b>"')
-os.system('curl -s -X POST https://api.telegram.org/bot529103954:AAHX31LDNS_BYhruFUyxLLjbFa_rPQxhhMI/sendMessage -d chat_id=140970889 -d parse_mode=html -d text="<b> Доска позора:</b>\n' + str(topchart()) + '"')
+os.system('curl -s -X POST https://api.telegram.org/bot/sendMessage -d chat_id= -d parse_mode=html -d text="Пидор обнаружен! И это: <b>' + str(pidor) + '</b>"')
+os.system('curl -s -X POST https://api.telegram.org/bot/sendMessage -d chat_id= -d parse_mode=html -d text="<b> Доска позора:</b>\n' + str(topchart()) + '"')
 '''
 
 
