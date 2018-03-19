@@ -43,12 +43,23 @@ def topchart():
         for(num, count) in plist.items(section_name):
             q = [int(count), str(section_name)]
             l.append(q)
-    e = sorted(l, key=lambda x: str(x[0]), reverse=True)
+    e = sorted(l, key=lambda x: int(x[0]), reverse=True)
+    print(e)
     best = e[0][0]
+    second = -1
+    third = -1
     for item in e:
         if item[0] == best:
-            chart = chart + str(str(item[1]) + " = " + str(item[0])) + " " + u'\U0001F451' + "\n"
-        else:
+            chart = chart + u'\U0001F451' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+        if item[0] < best and (second == -1 or second == item[0]) and third == -1:
+            if second == -1:
+                second = item[0]
+            chart = chart + u'\U0001F948' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+        if item[0] < second and (third == -1 or third == item[0]):
+            if third == -1:
+                third = item[0]
+            chart = chart + u'\U0001F949' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+        if item[0] < third:
             chart = chart + str(str(item[1]) + " = " + str(item[0])) + "\n"
     return chart
 
