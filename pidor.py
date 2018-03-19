@@ -34,7 +34,7 @@ def stats(p):  # Запись статистики
                 statscheck.write(statfile)
 
 
-def topchart():
+def topchart():  # Построение топа
     chart = '<b>=== ТОП пидоров ===</b>\n'
     l = []
     plist = ConfigParser()
