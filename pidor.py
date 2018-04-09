@@ -39,18 +39,21 @@ def topchart():  # Построение топа
     l = []
     plist = ConfigParser()
     plist.read(curdir + '/results.ini')
+    total = 0
     for section_name in plist.sections():
         for(num, count) in plist.items(section_name):
+            total += int(count)
             q = [int(count), str(section_name)]
             l.append(q)
     e = sorted(l, key=lambda x: int(x[0]), reverse=True)
-    print(e)
+    print(total)
     best = e[0][0]
     second = -1
     third = -1
     for item in e:
         if item[0] == best:
-            chart = chart + u'\U0001F451' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+            chart = chart + u'\U0001F451' + ' ' + str(str(item[1]) + " = " + str(item[0])) + \
+                " (" + str(round((int(item[0])/total)*100)) + "%)\n"
         if item[0] < best and (second == -1 or second == item[0]) and third == -1:
             if second == -1:
                 second = item[0]
@@ -61,6 +64,7 @@ def topchart():  # Построение топа
             chart = chart + u'\U0001F949' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
         if item[0] < third:
             chart = chart + str(str(item[1]) + " = " + str(item[0])) + "\n"
+    chart += '<b>======</b>\nВсего пидоров: ' + str(total)
     return chart
 
 
