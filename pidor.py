@@ -11,17 +11,17 @@ from configparser import ConfigParser
 
 curdir = os.path.dirname(os.path.abspath(__file__))
 date_format = '%d/%m/%Y'
-curdate = datetime.date.today()
-curdate = curdate.strftime('%d/%m/%Y')
+current_date = datetime.date.today()
+current_date = current_date.strftime(date_format)
 
 
-def resultsread(section, key):  # Парсер results.ini
+def stats_read(section, key):  # Парсер results.ini
     result = ConfigParser()
     result.read(curdir + '/results.ini')
     return result.get(section, key)
 
 
-def stats(p):  # Запись статистики
+def stats_record(p):  # Запись статистики в results.ini
     statscheck = ConfigParser()
     statscheck.read(curdir + '/results.ini')
     if not p == "GENERAL":
@@ -34,26 +34,33 @@ def stats(p):  # Запись статистики
             with open(curdir + '/results.ini', 'w') as statfile:
                 statscheck.write(statfile)
         else:
-            statscheck.set(p, 'num', str((int(resultsread(p, 'num')) + 1)))
+            statscheck.set(p, 'num', str((int(stats_read(p, 'num')) + 1)))
             with open(curdir + '/results.ini', 'w') as statfile:
                 statscheck.write(statfile)
 
 
-def kingstats(line):
-    kingini = ConfigParser()
-    kingini.read(curdir + '/results.ini')
-    kingini.set('KING', 'data', line)
+def king_stats(line):  # Запись даты и имени топового участника в results.ini по ключу KING
+    king_ini = ConfigParser()
+    king_ini.read(curdir + '/results.ini')
+    king_ini.set('KING', 'data', line)
     with open(curdir + '/results.ini', 'w') as statfile:
-        kingini.write(statfile)
+        king_ini.write(statfile)
 
 
 def topchart():  # Построение топа
-    chart = '<b>====== ТОП пидоров ======</b>\n'
     l = []
-    curking = ast.literal_eval(resultsread("KING", "data"))
+    total = 0
+    current_king = ast.literal_eval(stats_read("KING", "data"))
+    second = -1  # вспомогательная переменная для выделения второго места
+    third = -1  # вспомогательная переменная для выделения третьего места
+    first_c = [0, 0]  # 1 позиция для записи доли к общему количеству розыгрышей, 2 счётчик человек в категории
+    second_c = [0, 0]  # то же самое для серебряной медали
+    third_c = [0, 0]  # то же самое для бронзовой медали
+
+    chart = '<b>=== ТОП пидоров ===</b>\n'  # Начало построения строки
+
     plist = ConfigParser()
     plist.read(curdir + '/results.ini')
-    total = 0
     for section_name in plist.sections():
         if not section_name == 'KING':
             for(num, count) in plist.items(section_name):
@@ -61,55 +68,63 @@ def topchart():  # Построение топа
                 q = [int(count), str(section_name)]
                 l.append(q)
     e = sorted(l, key=lambda x: int(x[0]), reverse=True)
-    best = e[0][0]
-    second = -1
-    third = -1
-    first_c = [0, 0]
-    second_c = [0, 0]
-    third_c = [0, 0]
+
+    first = e[0][0]
+
     for item in e:
 
-        if str(item[1]) in curking and item[0] < best:
-            del curking[item[1]]
+        if str(item[1]) in current_king and item[0] < first:  # Удаление имен из KING, показатели которых ниже first
+            del current_king[item[1]]
 
-        if item[0] == best:
-            if not str(item[1]) in curking:
+        if item[0] == first:  # Первое место (корона)
+            if not str(item[1]) in current_king:  # Запись в KING игрока, поднявшегося только что до топа
                 date = datetime.date.today()
-                curking[str(item[1])] = date.strftime('%d/%m/%Y')
+                current_king[str(item[1])] = date.strftime('%d/%m/%Y')
+
             first_c[0] = round((int(item[0])/total)*100, 2)
             first_c[1] += 1
-            daydelta = datetime.datetime.strptime(curdate, date_format) - datetime.datetime.strptime(curking[item[1]], date_format)
+            daydelta = datetime.datetime.strptime(current_date, date_format) - datetime.datetime.strptime(current_king[item[1]], date_format)
             daydelta = daydelta.days
+
             if daydelta is 0:
                 days = ' (Сегодня)'
             else:
                 days = " (" + str(daydelta) + "д.)"
-            chart = chart + u'\U0001F451' + ' ' + str(str(item[1]) + " = " + str(item[0])) + days + "\n"
 
-        if item[0] < best and (second == -1 or second == item[0]) and third == -1:
+            chart = chart + u'\U0001F451' + ' ' + str(str(item[1]) + " = " + str(item[0])) + \
+                '<i>' + days + "</i>\n"
+
+        if item[0] < first and (second == -1 or second == item[0]) and third == -1:
             if second == -1:
                 second = item[0]
-            chart = chart + u'\U0001F948' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+
             second_c[0] = round((int(item[0]) / total) * 100, 2)
             second_c[1] += 1
+
+            chart = chart + u'\U0001F948' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+
         if item[0] < second and (third == -1 or third == item[0]):
             if third == -1:
                 third = item[0]
-            chart = chart + u'\U0001F949' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+
             third_c[0] = round((int(item[0]) / total) * 100, 2)
             third_c[1] += 1
+
+            chart = chart + u'\U0001F949' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+
         if item[0] < third:
             chart = chart + str(str(item[1]) + " = " + str(item[0])) + "\n"
-    chart += '<code>======\nПопаданий из пидормёта: ' + str(total) + \
-             '\nДоля попаданий на пидора:\n' +\
+    # Подвал сообщения с топом. Раскомментируйте необходимую часть для более тонкой статистики.
+    chart += '<code>======\nДней под гнётом деда: ' + str(total) + '\n</code>'
+    '''\nДоля попаданий на пидора:\n' +\
              u'\U0001F451' + ': ' + str(first_c[0]) + '%\n' + \
              u'\U0001F948' + ': ' + str(second_c[0]) + '%\n' + \
              u'\U0001F949' + ': ' + str(third_c[0]) + '%\n' + \
              u'\u2211' + ' попаданий на группу:\n' + \
              u'\U0001F451' + ': ' + str(first_c[0] * first_c[1]) + '%\n' + \
              u'\U0001F948' + ': ' + str(second_c[0] * second_c[1]) + '%\n' + \
-             u'\U0001F949' + ': ' + str(third_c[0] * third_c[1]) + '%\n</code>'
-    kingstats(str(curking))
+             u'\U0001F949' + ': ' + str(third_c[0] * third_c[1]) + '%\n</code>'''
+    king_stats(str(current_king))
     return chart
 
 
@@ -123,11 +138,10 @@ startphrase = c.startphrase[randint(0, len(c.startphrase)-1)]
 searchphrase = c.searchphrase[randint(0, len(c.searchphrase)-1)]
 foundphrase = str(c.foundphrase[randint(0, len(c.foundphrase)-1)] % pidor)
 
-
-stats(pidor)
+stats_record(pidor)
 
 sendtotg(startphrase)
-time.sleep(randint(1, 3))
+time.sleep(randint(1, 2))
 sendtotg(searchphrase)
 time.sleep(randint(1, 3))
 sendtotg(foundphrase)
