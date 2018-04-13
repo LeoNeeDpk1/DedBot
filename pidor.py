@@ -8,7 +8,6 @@ import ast
 from random import randint
 from configparser import ConfigParser
 
-
 curdir = os.path.dirname(os.path.abspath(__file__))
 date_format = '%d/%m/%Y'
 current_date = datetime.date.today()
@@ -63,7 +62,7 @@ def topchart():  # Построение топа
     plist.read(curdir + '/results.ini')
     for section_name in plist.sections():
         if not section_name == 'KING':
-            for(num, count) in plist.items(section_name):
+            for (num, count) in plist.items(section_name):
                 total += int(count)
                 q = [int(count), str(section_name)]
                 l.append(q)
@@ -81,9 +80,11 @@ def topchart():  # Построение топа
                 date = datetime.date.today()
                 current_king[str(item[1])] = date.strftime('%d/%m/%Y')
 
-            first_c[0] = round((int(item[0])/total)*100, 2)
+            first_c[0] = round((int(item[0]) / total) * 100, 2)
             first_c[1] += 1
-            daydelta = datetime.datetime.strptime(current_date, date_format) - datetime.datetime.strptime(current_king[item[1]], date_format)
+            daydelta = datetime.datetime.strptime(current_date, date_format) - datetime.datetime.strptime(current_king
+                                                                                                          [item[1]],
+                                                                                                          date_format)
             daydelta = daydelta.days
 
             if daydelta is 0:
@@ -91,8 +92,8 @@ def topchart():  # Построение топа
             else:
                 days = " (" + str(daydelta) + "д.)"
 
-            chart = chart + u'\U0001F451' + ' ' + str(str(item[1]) + " = " + str(item[0])) + \
-                '<i>' + days + "</i>\n"
+            chart += u'\U0001F451' + ' ' + str(str(item[1]) + " = " + str(item[0])) + \
+                     '<i>' + days + "</i>\n"
 
         if item[0] < first and (second == -1 or second == item[0]) and third == -1:
             if second == -1:
@@ -101,7 +102,7 @@ def topchart():  # Построение топа
             second_c[0] = round((int(item[0]) / total) * 100, 2)
             second_c[1] += 1
 
-            chart = chart + u'\U0001F948' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+            chart += u'\U0001F948' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
 
         if item[0] < second and (third == -1 or third == item[0]):
             if third == -1:
@@ -110,10 +111,10 @@ def topchart():  # Построение топа
             third_c[0] = round((int(item[0]) / total) * 100, 2)
             third_c[1] += 1
 
-            chart = chart + u'\U0001F949' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
+            chart += u'\U0001F949' + ' ' + str(str(item[1]) + " = " + str(item[0])) + "\n"
 
         if item[0] < third:
-            chart = chart + str(str(item[1]) + " = " + str(item[0])) + "\n"
+            chart += str(str(item[1]) + " = " + str(item[0])) + "\n"
     # Подвал сообщения с топом. Раскомментируйте необходимую часть для более тонкой статистики.
     chart += '<code>======\nДней под гнётом деда: ' + str(total) + '\n</code>'
     '''\nДоля попаданий на пидора:\n' +\
@@ -133,10 +134,12 @@ def sendtotg(text):
               ' -d parse_mode=html -d text="' + str(text) + '"')
 
 
-pidor = c.pidors[randint(0, len(c.pidors)-1)]
-startphrase = c.startphrase[randint(0, len(c.startphrase)-1)]
-searchphrase = c.searchphrase[randint(0, len(c.searchphrase)-1)]
-foundphrase = str(c.foundphrase[randint(0, len(c.foundphrase)-1)] % pidor)
+pidor = c.pidors[randint(0, len(c.pidors) - 1)]
+startphrase = c.startphrase[randint(0, len(c.startphrase) - 1)]
+searchphrase = c.searchphrase[randint(0, len(c.searchphrase) - 1)]
+foundphrase = str(c.foundphrase[randint(0, len(c.foundphrase) - 1)])
+if "%" in foundphrase:
+    foundphrase = str(foundphrase % pidor)
 
 stats_record(pidor)
 
