@@ -3,6 +3,10 @@ token = '<YOUR_TOKEN>'
 
 chatid = '<Chat_ID>'
 
+use_proxy = False
+
+proxy = 'https://user:pass@host:port'
+
 participants = ['name1', 'name2', '...']
 
 startphrase = ['phrase1', 'phrase2', '...']
