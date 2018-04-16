@@ -5,8 +5,16 @@ import os
 import time
 import datetime
 import ast
+import telebot
 from random import randint
 from configparser import ConfigParser
+
+bot = telebot.TeleBot(c.token)
+
+proxies = {
+    'http': 'socks5://telegram.vpn99.net:55655',
+    'https': 'socks5://telegram.vpn99.net:55655'
+}
 
 curdir = os.path.dirname(os.path.abspath(__file__))
 date_format = '%d/%m/%Y'
@@ -56,7 +64,7 @@ def topchart():  # Построение топа
     second_c = [0, 0]  # то же самое для серебряной медали
     third_c = [0, 0]  # то же самое для бронзовой медали
 
-    chart = '<b>=== ТОП пидоров ===</b>\n'  # Начало построения строки
+    chart = '<b>' + c.chart_header + '</b>\n'  # Начало построения строки
 
     plist = ConfigParser()
     plist.read(curdir + '/results.ini')
@@ -116,12 +124,12 @@ def topchart():  # Построение топа
         if item[0] < third:
             chart += str(str(item[1]) + " = " + str(item[0])) + "\n"
     # Подвал сообщения с топом. Раскомментируйте необходимую часть для более тонкой статистики.
-    chart += '<code>======\nДней под гнётом деда: ' + str(total) + '\n</code>'
-    '''\nДоля попаданий на пидора:\n' +\
+    chart += '<code>======\n' + c.chart_total_phrase + ' ' + str(total) + '\n</code>'
+    '''\nДоля выпаданий на участника:\n' +\
              u'\U0001F451' + ': ' + str(first_c[0]) + '%\n' + \
              u'\U0001F948' + ': ' + str(second_c[0]) + '%\n' + \
              u'\U0001F949' + ': ' + str(third_c[0]) + '%\n' + \
-             u'\u2211' + ' попаданий на группу:\n' + \
+             u'\u2211' + ' выпаданий на группу:\n' + \
              u'\U0001F451' + ': ' + str(first_c[0] * first_c[1]) + '%\n' + \
              u'\U0001F948' + ': ' + str(second_c[0] * second_c[1]) + '%\n' + \
              u'\U0001F949' + ': ' + str(third_c[0] * third_c[1]) + '%\n</code>'''
@@ -130,18 +138,17 @@ def topchart():  # Построение топа
 
 
 def sendtotg(text):
-    os.system('curl -s -X POST https://api.telegram.org/bot' + c.token + '/sendMessage -d chat_id=' + c.chatid +
-              ' -d parse_mode=html -d text="' + str(text) + '"')
+    bot.send_message(c.chatid, parse_mode='html', text=text)
 
 
-pidor = c.pidors[randint(0, len(c.pidors) - 1)]
+winner = c.participants[randint(0, len(c.participants) - 1)]
 startphrase = c.startphrase[randint(0, len(c.startphrase) - 1)]
 searchphrase = c.searchphrase[randint(0, len(c.searchphrase) - 1)]
 foundphrase = str(c.foundphrase[randint(0, len(c.foundphrase) - 1)])
 if "%" in foundphrase:
-    foundphrase = str(foundphrase % pidor)
+    foundphrase = str(foundphrase % winner)
 
-stats_record(pidor)
+stats_record(winner)
 
 sendtotg(startphrase)
 time.sleep(randint(1, 2))
