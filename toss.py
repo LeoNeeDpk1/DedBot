@@ -8,13 +8,12 @@ import ast
 import telebot
 from random import randint
 from configparser import ConfigParser
+from telebot import apihelper
 
 bot = telebot.TeleBot(c.token)
 
-proxies = {
-    'http': 'socks5://telegram.vpn99.net:55655',
-    'https': 'socks5://telegram.vpn99.net:55655'
-}
+if c.use_proxy:
+    apihelper.proxy = {'https': c.proxy}
 
 curdir = os.path.dirname(os.path.abspath(__file__))
 date_format = '%d/%m/%Y'
@@ -137,8 +136,12 @@ def topchart():  # Построение топа
     return chart
 
 
-def sendtotg(text):
+def send_text_to_tg(text):
     bot.send_message(c.chatid, parse_mode='html', text=text)
+
+
+def send_sticker_to_tg(sticker):
+    bot.send_sticker(c.chatid, sticker)
 
 
 winner = c.participants[randint(0, len(c.participants) - 1)]
@@ -150,9 +153,10 @@ if "%" in foundphrase:
 
 stats_record(winner)
 
-sendtotg(startphrase)
+send_sticker_to_tg("CAADBAADZgADXSupARwvmj-WrFgeAg")
+send_text_to_tg(startphrase)
 time.sleep(randint(1, 2))
-sendtotg(searchphrase)
+send_text_to_tg(searchphrase)
 time.sleep(randint(1, 3))
-sendtotg(foundphrase)
-sendtotg(topchart())
+send_text_to_tg(foundphrase)
+send_text_to_tg(topchart())
